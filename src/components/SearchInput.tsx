@@ -6,7 +6,7 @@ interface SearchInputProps {
 
 export function SearchInput({children=""}: SearchInputProps) {
     return (
-        <div className="flex-input">
+        <div className="center">
             <label>
                 <input type="text" />
             </label>

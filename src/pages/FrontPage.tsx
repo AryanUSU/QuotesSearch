@@ -1,9 +1,9 @@
 import { SearchInput } from "../components/SearchInput";
 
-export function MainPage() {
+export function FrontPage() {
     return (
         <main>
-            <h1>Quotes Search</h1>
+            <h1 className="center header">Quotes Search</h1>
             <form>
                 <SearchInput></SearchInput>
             </form>
