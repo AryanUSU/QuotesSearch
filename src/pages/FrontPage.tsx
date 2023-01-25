@@ -3,6 +3,7 @@ import { useEffect, useState } from "react";
 interface Quote {
     _id: number;
     text: string;
+    author: string;
 }
 let ID_COUNT = 0;
 
@@ -11,15 +12,18 @@ export function FrontPage() {
     const [searched, setSearched] = useState(false);
     const [secondPage, setSecondPage] = useState(false);
     const [quotes, setQuotes] = useState<Quote[]>([]);
-    const [randomQuote, setRandomQuote] = useState("");
-    const [randomAuthor, setRandomAuthor] = useState("");
+    const [randomQuote, setRandomQuote] = useState<Quote | null>(null);
 
     // Async function to grab random quote on site start
     async function loadRandomQuote() {
         const result = await fetch("https://usu-quotes-mimic.vercel.app/api/random");
         const quote = await result.json();
-        setRandomQuote(quote.content);
-        setRandomAuthor(quote.author);
+        const tempQuote: Quote = {
+            _id: ID_COUNT++,
+            text: quote.content,
+            author: quote.author
+        }
+        setRandomQuote(tempQuote);
     }
 
     // Async function to grab quotes from searched author name
@@ -32,7 +36,8 @@ export function FrontPage() {
         for (let i = 0; i < quotesArr.length; i++) {
             const tempQuote: Quote = {
                 _id: ID_COUNT++,
-                text: quotesArr[i].content
+                text: quotesArr[i].content,
+                author: quotesArr[i].author
             };
             finalArr.push(tempQuote);
         }
@@ -75,12 +80,12 @@ export function FrontPage() {
             </form>
 
             <div className="center random-quote" hidden={secondPage}>
-                {randomQuote}
-                <div hidden={randomAuthor === ''}>
-                    - {randomAuthor}
+                {randomQuote?.text}
+                <div hidden={randomQuote?.author === ''}>
+                    - {randomQuote?.author}
                 </div>
 
-                <div hidden={randomAuthor !== ''}>
+                <div hidden={randomQuote?.author !== ''}>
                     - Anon
                 </div>
             </div>
