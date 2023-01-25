@@ -78,7 +78,7 @@ export function FrontPage() {
                     </label>
                 </div>
             </form>
-
+            
             <div className="center random-quote" hidden={secondPage}>
                 {randomQuote?.text}
                 <div hidden={randomQuote?.author === ''}>
