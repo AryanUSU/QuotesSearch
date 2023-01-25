@@ -7,12 +7,14 @@ interface Quote {
 let ID_COUNT = 0;
 
 export function FrontPage() {
-    const [input, setInput] = useState("")
-    const [searched, setSearched] = useState(false)
-    const [quotes, setQuotes] = useState<Quote[]>([])
-    const [randomQuote, setRandomQuote] = useState("")
-    const [randomAuthor, setRandomAuthor] = useState("")
+    const [input, setInput] = useState("");
+    const [searched, setSearched] = useState(false);
+    const [secondPage, setSecondPage] = useState(false);
+    const [quotes, setQuotes] = useState<Quote[]>([]);
+    const [randomQuote, setRandomQuote] = useState("");
+    const [randomAuthor, setRandomAuthor] = useState("");
 
+    // Async function to grab random quote on site start
     async function loadRandomQuote() {
         const result = await fetch("https://usu-quotes-mimic.vercel.app/api/random");
         const quote = await result.json();
@@ -20,6 +22,7 @@ export function FrontPage() {
         setRandomAuthor(quote.author);
     }
 
+    // Async function to grab quotes from searched author name
     async function loadQuotes() {
         const result = await fetch(`https://usu-quotes-mimic.vercel.app/api/search?query=${input}`);
         const results = await result.json();
@@ -43,17 +46,17 @@ export function FrontPage() {
 
     // Effect to search for quotes by author
     useEffect( () => {
-        console.log('hi');
         if (searched) {
+            setSecondPage(true);
             loadQuotes();
+            setSearched(false);
         }
     }, [searched]);
 
     return (
         <main>
-            <h1 className="center header" hidden={searched}>Quotes Search</h1>
-            {/* TODO: CHANGE THE CSS OF THE SECOND PAGE QUOTES */}
-            <h1 className="center header" hidden={!searched}>Quotes Search</h1>
+            <h1 className="center header" hidden={secondPage}>Quotes Search</h1>
+            <h1 className="center" hidden={!secondPage}>Quotes Search</h1>
 
             <form onSubmit={e => e.preventDefault()}>
                 <div className="center">
@@ -63,8 +66,6 @@ export function FrontPage() {
                         onKeyDown={e => {
                             if (e.key === 'Enter') {
                                 if (input.length > 0) {
-                                    setSearched(false);
-                                    console.log('hello');
                                     setSearched(true);
                                 }
                             }
@@ -73,7 +74,7 @@ export function FrontPage() {
                 </div>
             </form>
 
-            <div className="center" hidden={searched}>
+            <div className="center random-quote" hidden={secondPage}>
                 {randomQuote}
                 <div hidden={randomAuthor === ''}>
                     - {randomAuthor}
@@ -84,7 +85,7 @@ export function FrontPage() {
                 </div>
             </div>
 
-            <div className="center" hidden={!searched}>
+            <div className="center" hidden={!secondPage}>
                 {
                     quotes.map((quote) =>
                         <div className="center quote" key={quote._id}>

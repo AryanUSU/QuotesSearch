@@ -43,6 +43,14 @@ input[type=text]:focus {
    font-size: large;
 }
 
+.random-quote {
+  font-family:'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  font-size: larger;
+  margin-top: 15px;
+  margin-left: 37.5%;
+  width: 25%;
+}
+
 .quote {
   background-color: #2d58d9;
   color: white;
